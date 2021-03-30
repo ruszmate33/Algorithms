@@ -4,6 +4,7 @@
  *  Last modified:     28/3/2021
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
@@ -117,17 +118,13 @@ public class Percolation {
         return false;
     }
 
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
     // test client (optional)
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         Percolation percolation = new Percolation(n);
         while (!percolation.percolates()) {
-            int randomRow = percolation.getRandomNumber(1, n + 1);
-            int randomCol = percolation.getRandomNumber(1, n + 1);
+            int randomRow = StdRandom.uniform(1, n + 1);
+            int randomCol = StdRandom.uniform(1, n + 1);
             if (percolation.isFull(randomRow, randomCol)) {
                 percolation.open(randomRow, randomCol);
             }

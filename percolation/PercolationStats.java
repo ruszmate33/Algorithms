@@ -4,6 +4,7 @@
  *  Last modified:     28/03/221
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
@@ -25,8 +26,8 @@ public class PercolationStats {
         for (int i = 0; i < trials; i++) {
             Percolation percolation = new Percolation(n);
             while (!percolation.percolates()) {
-                int randomRow = percolation.getRandomNumber(1, n + 1);
-                int randomCol = percolation.getRandomNumber(1, n + 1);
+                int randomRow = StdRandom.uniform(1, n + 1);
+                int randomCol = StdRandom.uniform(1, n + 1);
                 percolation.open(randomRow, randomCol);
             }
             int opens = percolation.numberOfOpenSites();
