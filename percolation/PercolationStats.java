@@ -6,6 +6,7 @@
 
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.Stopwatch;
 
 public class PercolationStats {
     private int gridSize;
@@ -14,11 +15,8 @@ public class PercolationStats {
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
-        if (n <= 0) {
+        if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("grid must be at least 1 cells");
-        }
-        if (trials <= 0) {
-            throw new IllegalArgumentException("you need more than 0 trials");
         }
         gridSize = n;
         numTrials = trials;
@@ -57,6 +55,7 @@ public class PercolationStats {
 
     // test client (see below)
     public static void main(String[] args) {
+        Stopwatch stopwatch = new Stopwatch();
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
         PercolationStats ps = new PercolationStats(n, trials);
@@ -65,5 +64,6 @@ public class PercolationStats {
         System.out.println(
                 "95% confidence interval = [ " + ps.confidenceLo() + ", " + ps.confidenceHi()
                         + "]");
+        System.out.println(stopwatch.elapsedTime());
     }
 }

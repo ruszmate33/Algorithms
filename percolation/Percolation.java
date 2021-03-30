@@ -11,6 +11,7 @@ public class Percolation {
     private int gridSize;
     private int[][] grid;
     private WeightedQuickUnionUF wquf;
+    private int numOpen = 0;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -40,7 +41,7 @@ public class Percolation {
     public void open(int row, int col) {
         if (isFull(row, col)) {
             grid[row][col] = 1;
-
+            numOpen++;
             // check all adjacent squares if they are open
             int[] adjacentRows = getAdjacents(row);
             int[] adjacentCols = getAdjacents(col);
@@ -90,12 +91,6 @@ public class Percolation {
 
     // returns the number of open sites
     public int numberOfOpenSites() {
-        int numOpen = 0;
-        for (int i = 0; i <= gridSize; i++) {
-            for (int j = 0; j <= gridSize; j++) {
-                numOpen += grid[i][j];
-            }
-        }
         return numOpen;
     }
 
@@ -129,6 +124,5 @@ public class Percolation {
                 percolation.open(randomRow, randomCol);
             }
         }
-        // return percolation.numberOfOpenSites();
     }
 }
