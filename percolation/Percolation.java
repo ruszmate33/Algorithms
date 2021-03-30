@@ -4,11 +4,12 @@
  *  Last modified:     28/3/2021
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
     private int gridSize;
     private int[][] grid;
-    private int[] roots;
-    private int[] size;
+    private WeightedQuickUnionUF wquf;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -17,35 +18,17 @@ public class Percolation {
         }
         gridSize = n;
         grid = new int[n + 1][n + 1];
-        roots = new int[n * n];
-        size = new int[n * n];
-
-        int id = 0;
+        wquf = new WeightedQuickUnionUF(n * n);
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
                 grid[i][j] = 0;
-                roots[id] = id;
-                size[id] = 1;
-                id++;
             }
         }
-
     }
 
     public int getIDfromGrid(int row, int col) {
         return (row - 1) * gridSize + (col - 1);
-    }
-
-    public int getRoot(int row, int col) {
-        // System.out.println(" getRoot row: " + row + " col: " + col);
-        int idx = getIDfromGrid(row, col);
-        // System.out.println("getRoot idx: " + idx);
-        while (idx != roots[idx]) {
-            roots[idx] = roots[roots[idx]];
-            idx = roots[idx];
-        }
-        return idx;
     }
 
     public int getSize() {
@@ -61,34 +44,22 @@ public class Percolation {
             int[] adjacentRows = getAdjacents(row);
             int[] adjacentCols = getAdjacents(col);
             // if open connect them to newly opened site
+            int newlyOpenID = getIDfromGrid(row, col);
             for (int adjRow : adjacentRows) {
-                // connection function
-                union(adjRow, col, row, col);
+                if (isOpen(adjRow, col)) {
+                    int adjacentID = getIDfromGrid(adjRow, col);
+                    // connection function
+                    wquf.union(newlyOpenID, adjacentID);
+                }
             }
             for (int adjCol : adjacentCols) {
-                union(row, adjCol, row, col);
+                if (isOpen(row, adjCol)) {
+                    int adjacentID = getIDfromGrid(row, adjCol);
+                    wquf.union(newlyOpenID, adjacentID);
+                }
             }
         }
     }
-
-    public void union(int row, int col, int row2, int col2) {
-        // union function
-        if (isOpen(row, col)) {
-            // make the connection
-            int root1 = getRoot(row, col);
-            int root2 = getRoot(row2, col2);
-            if (root1 == root2) return;
-            if (size[root1] < size[root2]) {
-                roots[root1] = root2;
-                size[root2] += size[root1];
-            }
-            else {
-                roots[root2] = root1;
-                size[root1] += size[root2];
-            }
-        }
-    }
-
 
     public int[] getAdjacents(int current) {
         int[] adjacent;
@@ -127,28 +98,22 @@ public class Percolation {
         return numOpen;
     }
 
-    // are two cells connected
-    private boolean find(int row1, int col1, int row2, int col2) {
-        int rootID1 = getRoot(row1, col1);
-        int rootID2 = getRoot(row2, col2);
-        return (rootID1 == rootID2);
-    }
-
     // does the system percolate?
     public boolean percolates() {
         // for cells in the lowest row
         for (int i = 1; i <= gridSize; i++) {
             // if cells if open
             if (isOpen(gridSize, i)) {
+                int lowerRowID = getIDfromGrid(gridSize, i);
+                int rootLower = wquf.find(lowerRowID);
                 for (int j = 1; j <= gridSize; j++) {
                     if (isOpen(1, j)) {
-                        return find(gridSize, i, 1, j);
+                        int upperRowID = getIDfromGrid(1, j);
+                        return (wquf.find(upperRowID) == rootLower);
                     }
                 }
             }
         }
-
-        // else return false
         return false;
     }
 
