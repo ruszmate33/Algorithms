@@ -8,9 +8,9 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int gridSize;
-    private int[][] grid;
-    private WeightedQuickUnionUF wquf;
+    final int gridSize;
+    private boolean[][] grid;
+    final WeightedQuickUnionUF wquf;
     private int numOpen = 0;
 
     // creates n-by-n grid, with all sites initially blocked
@@ -19,12 +19,12 @@ public class Percolation {
             throw new IllegalArgumentException("grid must be at least 1 cells");
         }
         gridSize = n;
-        grid = new int[n + 1][n + 1];
+        grid = new boolean[n + 1][n + 1];
         wquf = new WeightedQuickUnionUF(n * n + 2);
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                grid[i][j] = 0;
+                grid[i][j] = false;
                 if (i == 1) {
                     wquf.union(getIDfromGrid(i, j), 0); // virtualTop: 0
                 }
@@ -32,22 +32,18 @@ public class Percolation {
                     wquf.union(getIDfromGrid(i, j), n * n + 1); // virtButton
                 }
             }
-            // }
         }
     }
 
-    public int getIDfromGrid(int row, int col) {
+    private int getIDfromGrid(int row, int col) {
         return (row - 1) * gridSize + col;
-    }
-
-    public int getSize() {
-        return gridSize;
     }
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
+        validateArgs(row, col);
         if (!isOpen(row, col)) {
-            grid[row][col] = 1;
+            grid[row][col] = true;
             numOpen++;
 
             // if open connect them to newly opened site
@@ -72,7 +68,8 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        return (grid[row][col] == 1);
+        validateArgs(row, col);
+        return grid[row][col];
         // return (grid[row][col] == 1 && !isConnected(row, col));
     }
 
@@ -83,7 +80,14 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        return (grid[row][col] == 1 && isConnected(row, col));
+        validateArgs(row, col);
+        return (grid[row][col] && isConnected(row, col));
+    }
+
+    private void validateArgs(int row, int col) {
+        if (row < 1 || row > gridSize || col < 1 || col > gridSize) {
+            throw new IllegalArgumentException();
+        }
     }
 
     // returns the number of open sites
