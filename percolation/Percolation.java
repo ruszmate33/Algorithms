@@ -32,6 +32,7 @@ public class Percolation {
                     wquf.union(getIDfromGrid(i, j), n * n + 1); // virtButton
                 }
             }
+            // }
         }
     }
 
@@ -82,7 +83,7 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        return (grid[row][col] == 1 && !isConnected(row, col));
+        return (grid[row][col] == 1 && isConnected(row, col));
     }
 
     // returns the number of open sites
@@ -92,7 +93,12 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return (wquf.find(0) == wquf.find(gridSize * gridSize + 1));
+        if (gridSize != 1) {
+            return (wquf.find(0) == wquf.find(gridSize * gridSize + 1));
+        }
+        else {
+            return isOpen(1, 1);
+        }
     }
 
     // test client (optional)

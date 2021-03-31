@@ -40,6 +40,7 @@ public class PercolationStats {
 
     // sample standard deviation of percolation threshold
     public double stddev() {
+        if (openFracture.length == 1) return Double.NaN;
         return StdStats.stddev(openFracture);
     }
 
