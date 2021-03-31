@@ -20,17 +20,23 @@ public class Percolation {
         }
         gridSize = n;
         grid = new int[n + 1][n + 1];
-        wquf = new WeightedQuickUnionUF(n * n);
+        wquf = new WeightedQuickUnionUF(n * n + 2);
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
                 grid[i][j] = 0;
+                if (i == 1) {
+                    wquf.union(getIDfromGrid(i, j), 0);
+                }
+                if (i == n) {
+                    wquf.union(getIDfromGrid(i, j), n * n + 1);
+                }
             }
         }
     }
 
     public int getIDfromGrid(int row, int col) {
-        return (row - 1) * gridSize + (col - 1);
+        return (row - 1) * gridSize + col;
     }
 
     public int getSize() {
@@ -96,21 +102,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // for cells in the lowest row
-        for (int i = 1; i <= gridSize; i++) {
-            // if cells if open
-            if (isOpen(gridSize, i)) {
-                int lowerRowID = getIDfromGrid(gridSize, i);
-                int rootLower = wquf.find(lowerRowID);
-                for (int j = 1; j <= gridSize; j++) {
-                    if (isOpen(1, j)) {
-                        int upperRowID = getIDfromGrid(1, j);
-                        return (wquf.find(upperRowID) == rootLower);
-                    }
-                }
-            }
-        }
-        return false;
+        return (wquf.find(0) == wquf.find(gridSize * gridSize + 1));
     }
 
     // test client (optional)
