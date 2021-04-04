@@ -30,7 +30,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/hello" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/queues" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -56,9 +56,9 @@
     </configuration>
   </component>
   <component name="WindowStateProjectService">
-    <state x="421" y="95" key="FileChooserDialogImpl" timestamp="1616688645603">
+    <state x="421" y="95" key="FileChooserDialogImpl" timestamp="1617464930363">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="95" key="FileChooserDialogImpl/0.0.1280.680/2560.0.2560.1400@0.0.1280.680" timestamp="1616688645603" />
+    <state x="421" y="95" key="FileChooserDialogImpl/0.0.1280.680/2560.0.2560.1400@0.0.1280.680" timestamp="1617464930363" />
   </component>
 </project>

@@ -9,9 +9,9 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private int gridSize;
-    final int numTrials;
-    final double[] openFraction;
-    final double confConst;
+    final private int numTrials;
+    final private double[] openFraction;
+    final private double confConst;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -62,7 +62,7 @@ public class PercolationStats {
         int trials = Integer.parseInt(args[1]);
         PercolationStats ps = new PercolationStats(n, trials);
         System.out.println("mean                    = " + ps.mean());
-        System.out.println("stddev                   = " + ps.stddev());
+        System.out.println("stddev                  = " + ps.stddev());
         System.out.println(
                 "95% confidence interval = [ " + ps.confidenceLo() + ", " + ps.confidenceHi()
                         + "]");
