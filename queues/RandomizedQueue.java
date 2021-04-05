@@ -88,9 +88,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private class ReverseArrayIterator implements Iterator<Item> {
         int last;
+        int[] order;
 
         ReverseArrayIterator() {
             last = size - 1;
+            order = new int[size];
+            for (int i = 0; i < size; i++) {
+                order[i] = i;
+            }
+            StdRandom.shuffle(order);
         }
 
         public boolean hasNext() {
@@ -105,7 +111,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             if (!hasNext()) {
                 throw new java.util.NoSuchElementException();
             }
-            return items[last--];
+            return items[order[last--]];
         }
     }
 
