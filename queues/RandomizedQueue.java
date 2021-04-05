@@ -1,9 +1,12 @@
 /* *****************************************************************************
  *  Name: Mate Rusz
  *  Date: 04.04.2021
- *  Description:
+ *  Description: resizing array implementation is based on code presented
+ * in Algorithms, Part I by Princeton University
+ * https://algs4.cs.princeton.edu/13stacks/ResizingArrayStack.java.html
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -36,11 +39,19 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new IllegalArgumentException();
         }
         if (items.length == size) resize(2 * items.length);
-        items[size++] = item;
+        if (isEmpty()) {
+            items[size++] = item;
+        }
+        else {
+            int random = StdRandom.uniform(size);
+            Item randomItem = items[random];
+            items[size++] = randomItem;
+            items[random] = item;
+        }
     }
 
     private void resize(int newLength) {
-        // Item[] copy = new Item[newLength];
+        StdRandom.shuffle(items, 0, size);
         Item[] copy = (Item[]) new Object[newLength];
         for (int i = 0; i < size(); i++) {
             copy[i] = items[i];
@@ -51,42 +62,39 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // remove and return a random item
     public Item dequeue() {
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Stack underflow");
         }
-        int random = StdRandom.uniform(items.length);
-        Item randomItem = items[random];
-        while (size > 0 && randomItem == null) {
-            random = StdRandom.uniform(items.length);
-            randomItem = items[random];
-        }
-        items[random] = null;
+        Item randomItem = items[size - 1];
+        items[size - 1] = null;
         size--;
+        if (size > 0 && items.length / 4 > size) resize(items.length / 2);
         return randomItem;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Stack underflow");
         }
-        int random = StdRandom.uniform(items.length);
+        int random = StdRandom.uniform(size);
         Item randomItem = items[random];
-        while (size > 0 && randomItem == null) {
-            random = StdRandom.uniform(items.length);
-            randomItem = items[random];
-        }
         return randomItem;
     }
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        return new UniformRandomArrayIterator();
+        return new ReverseArrayIterator();
     }
 
-    private class UniformRandomArrayIterator implements Iterator<Item> {
+    private class ReverseArrayIterator implements Iterator<Item> {
+        int last;
+
+        ReverseArrayIterator() {
+            last = size - 1;
+        }
 
         public boolean hasNext() {
-            return !isEmpty();
+            return last >= 0;
         }
 
         public void remove() {
@@ -97,12 +105,21 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             if (!hasNext()) {
                 throw new java.util.NoSuchElementException();
             }
-            return dequeue();
+            return items[last--];
         }
     }
 
     // unit testing (required)
     public static void main(String[] args) {
+        int n = 5;
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        for (int i = 0; i < n; i++)
+            queue.enqueue(i);
+        for (int a : queue) {
+            for (int b : queue)
+                StdOut.print(a + "-" + b + " ");
+            StdOut.println();
+        }
         RandomizedQueue<String> rq = new RandomizedQueue<String>();
         rq.enqueue("fucking");
         rq.enqueue("hell");
