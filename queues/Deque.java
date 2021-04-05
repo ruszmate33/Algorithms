@@ -23,7 +23,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // is the deque empty?
     public boolean isEmpty() {
-        //return (first == null);
+        // return (first == null);
         return size == 0;
     }
 
@@ -41,7 +41,7 @@ public class Deque<Item> implements Iterable<Item> {
         first = new Node();
         first.item = item;
         first.next = oldfirst;
-        //first.previous = null;
+        first.previous = null;
         if (oldfirst != null) {
             oldfirst.previous = first;
         }
@@ -75,7 +75,7 @@ public class Deque<Item> implements Iterable<Item> {
         if (size == 0) throw new java.util.NoSuchElementException();
         Item item = first.item;
         first = first.next;
-        first.previous = null;
+        if (first != null) first.previous = null;
         size--;
         if (isEmpty()) last = null;
         return item;
@@ -122,7 +122,10 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public static void main(String[] args) {
-        Deque<String> deque = new Deque<String>();
+        Deque<Integer> deque = new Deque<>();
+        deque.addFirst(1);
+        deque.removeFirst();
+        /*
         assert deque.isEmpty() : "deque not empty upon creation";
         deque.addFirst("first to first");
         assert !deque.isEmpty() : "deque still empty";
@@ -133,9 +136,9 @@ public class Deque<Item> implements Iterable<Item> {
         }
         assert deque.first.item.equals(deque.removeFirst()) : "removeFirst error";
         assert deque.last.item.equals(deque.removeLast()) : "removeLast error";
-        /*System.out.println(deque.removeFirst());
+        /* System.out.println(deque.removeFirst());
         System.out.println(deque.removeFirst());
-        System.out.println(deque.removeFirst());*/
+        System.out.println(deque.removeFirst());
         System.out.println("size " + deque.size());
         System.out.println(deque.removeLast());
         System.out.println(deque.removeLast());
@@ -146,7 +149,8 @@ public class Deque<Item> implements Iterable<Item> {
             System.out.println(item);
         }
         assert !deque.first.item.equals(deque.last.item) : "removeFirst or removeLast error";
+        */
         // deque.removeLast();
-        //deque.removeFirst();
+        // deque.removeFirst();
     }
 }
